@@ -1,24 +1,53 @@
-// Location.js
 import React, { useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TextInput, SafeAreaView, TouchableOpacity } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { listingGeo } from '../../components/Interfaces/ListingGeo';
-import ExploreHeader from '../../components/Header/ExploreHeader'
+import ExploreHeader from '../../components/Header/ExploreHeader';
+import { HeightSpacer, NetworkImage, ReusableText, WidthSpacer } from '../../components';
+import { COLORS, TEXT } from '../../constants/theme';
+import { AntDesign } from "@expo/vector-icons";
+import reusable from "../../components/Reusable/reusable.style";
 
 const Location = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Function to filter markers based on selected category
-  const filteredMarkers = selectedCategory
-    ? listingGeo.filter(marker => marker.categories.includes(selectedCategory))
-    : listingGeo;
+  const filteredMarkers = listingGeo.filter(marker => {
+    const categoryMatch = !selectedCategory || marker.categories.includes(selectedCategory);
+    const searchMatch = marker.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return categoryMatch && searchMatch;
+  });
 
   const handleCategoryChanged = (category) => {
     setSelectedCategory(category);
   };
 
+  const handleSearch = (text) => {
+    setSearchQuery(text);
+  };
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <HeightSpacer height={15} />
+      
+      <View style={reusable.rowWithSpace("space-between")}>
+     
+      <ReusableText
+        text={"Maps"}
+        family={"regular"}
+        size={TEXT.large}
+        color={COLORS.black}
+      />
+      
+      <TouchableOpacity
+            style={styles.box}
+            onPress={() => navigation.navigate("Search")}
+          >
+            <AntDesign name="search1" size={26} />
+          </TouchableOpacity>
+          </View>
+          
+      
       <ExploreHeader onCategoryChanged={handleCategoryChanged} />
       <MapView
         style={styles.map}
@@ -39,18 +68,38 @@ const Location = () => {
               <View>
                 <Text>{marker.name}</Text>
                 <Text>{marker.description}</Text>
+                <NetworkImage
+                  source={marker.thumbnail_url}
+                  width={50} // Adjust width as needed
+                  height={50} // Adjust height as needed
+                  radius={10} // Adjust radius as needed
+                />
               </View>
             </Callout>
           </Marker>
         ))}
       </MapView>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'left',
+    marginTop: 20,
+  },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginHorizontal: 20,
   },
   map: {
     flex: 1,
