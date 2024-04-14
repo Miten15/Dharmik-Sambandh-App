@@ -15,7 +15,7 @@ import ProfileTile from "./Reusable/ProfileTile";
 import SettingTile from "./Tiles/Settings/SettingTile";
 import AssetImage from "./Reusable/AssetImage";
 import { listingGeo } from "./Interfaces/ListingGeo";
-
+import ExploreHeader from "./Header/ExploreHeader";
 export {
     ReusableText,
     ReusableBtn,
@@ -33,6 +33,7 @@ export {
     ProfileTile, 
     SettingTile, 
     AssetImage,
-    listingGeo
+    listingGeo,
+    ExploreHeader
    
 }
