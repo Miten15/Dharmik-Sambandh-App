@@ -1,19 +1,9 @@
-import { TextInput, Text, View, TouchableOpacity, Alert } from "react-native";
 import React, { useState } from "react";
-import styles from "./signin.style";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { COLORS, SIZES, TEXT } from "../../constants/theme";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { WidthSpacer, HeightSpacer, ReusableBtn } from "../../components";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import reusable from "../../components/Reusable/reusable.style";
-import { AntDesign } from "@expo/vector-icons";
-import Registration from "../authentication/Registration";
-import RegistraionScreen from "../Auth/RegistraionScreen"
+import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
-
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -25,21 +15,10 @@ const validationSchema = Yup.object().shape({
 const Signin = () => {
   const navigation = useNavigation();
   const [loader, setLoader] = useState(false);
-  const [responseData, setResponseData] = useState(null);
-  const [obsecureText, setObsecureText] = useState(false);
+  const [obscureText, setObscureText] = useState(true); 
 
   const errorLogin = () => {
-    Alert.alert("Invalid Form", "Please provide all required fields", [
-      {
-        text: "Cancel",
-        onPress: () => {},
-      },
-      {
-        text: "Continue",
-        onPress: () => {},
-      },
-      { defaultIndex: 1 },
-    ]);
+    Alert.alert("Invalid Form", "Please provide all required fields");
   };
 
   const login = async (values) => {
@@ -96,9 +75,7 @@ const Signin = () => {
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          login(values);
-        }}
+        onSubmit={(values) => login(values)}
       >
         {({
           handleChange,
@@ -110,125 +87,98 @@ const Signin = () => {
           setFieldTouched,
         }) => (
           <View style={{ paddingTop: 30 }}>
-            <View style={styles.wrapper}>
-              <Text style={styles.label}>Email</Text>
-              <View>
-                <View
-                  style={styles.inputWrapper(
-                    touched.email ? COLORS.lightBlue : COLORS.lightGrey
-                  )}
-                >
-                  <MaterialCommunityIcons
-                    name="email-outline"
-                    size={20}
-                    color={COLORS.gray}
-                  />
-
-                  <WidthSpacer width={10} />
-
-                  <TextInput
-                    placeholder="Enter email"
-                    onFocus={() => {
-                      setFieldTouched("email");
-                    }}
-                    onBlur={() => {
-                      setFieldTouched("email", "");
-                    }}
-                    value={values.email}
-                    onChangeText={handleChange("email")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={{ flex: 1 }}
-                  />
-                </View>
-                {touched.email && errors.email && (
-                  <Text style={styles.errorMessage}>{errors.email}</Text>
-                )}
-              </View>
-            </View>
-
-            <View style={styles.wrapper}>
-              <Text style={styles.label}>Password</Text>
-              <View>
-                <View
-                  style={styles.inputWrapper(
-                    touched.password ? COLORS.lightBlue : COLORS.lightGrey
-                  )}
-                >
-                  <MaterialCommunityIcons
-                    name="lock-outline"
-                    size={20}
-                    color={COLORS.gray}
-                  />
-
-                  <WidthSpacer width={10} />
-
-                  <TextInput
-                    secureTextEntry={obsecureText}
-                    placeholder="Enter password"
-                    onFocus={() => {
-                      setFieldTouched("password");
-                    }}
-                    onBlur={() => {
-                      setFieldTouched("password", "");
-                    }}
-                    value={values.password}
-                    onChangeText={handleChange("password")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={{ flex: 1 }}
-                  />
-
-                  <TouchableOpacity
-                    onPress={() => {
-                      setObsecureText(!obsecureText);
-                    }}
-                  >
-                    <MaterialCommunityIcons
-                      name={obsecureText ? "eye-outline" : "eye-off-outline"}
-                      size={18}
-                    />
-                  </TouchableOpacity>
-                </View>
-                {touched.password && errors.password && (
-                  <Text style={styles.errorMessage}>{errors.password}</Text>
-                )}
-              </View>
-            </View>
-
-            <HeightSpacer height={20} />
-
-            <View style={reusable.rowWithSpace("space-between")}>
-              <AntDesign
-                name="leftcircleo"
-                size={45}
-                color={COLORS.green}
-                onPress={() => navigation.navigate("Bottom")}
-              />
-
-              <ReusableBtn
-                onPress={isValid ? handleSubmit : errorLogin}
-                btnText={"SIGN IN"}
-                width={SIZES.width - 100}
-                backgroundColor={COLORS.green}
-                borderColor={COLORS.green}
-                borderWidth={0}
-                textColor={COLORS.white}
+            <View style={styles.inputWrapper}>
+              <MaterialCommunityIcons name="email-outline" size={20} color="gray" />
+              <TextInput
+                placeholder="Enter email"
+                onFocus={() => setFieldTouched("email")}
+                onBlur={() => setFieldTouched("email", "")}
+                value={values.email}
+                onChangeText={handleChange("email")}
+                autoCapitalize="none"
+                autoCorrect={false}
+                style={styles.input}
               />
             </View>
+            {touched.email && errors.email && <Text style={styles.errorMessage}>{errors.email}</Text>}
+
+            <View style={styles.inputWrapper}>
+              <MaterialCommunityIcons name="lock-outline" size={20} color="gray" />
+              <TextInput
+                secureTextEntry={obscureText}
+                placeholder="Enter password"
+                onFocus={() => setFieldTouched("password")}
+                onBlur={() => setFieldTouched("password", "")}
+                value={values.password}
+                onChangeText={handleChange("password")}
+                autoCapitalize="none"
+                autoCorrect={false}
+                style={styles.input}
+              />
+              <TouchableOpacity onPress={() => setObscureText(!obscureText)}>
+                <MaterialCommunityIcons name={obscureText ? "eye-outline" : "eye-off-outline"} size={18} />
+              </TouchableOpacity>
+            </View>
+            {touched.password && errors.password && <Text style={styles.errorMessage}>{errors.password}</Text>}
+
+            <TouchableOpacity style={styles.button} onPress={isValid ? handleSubmit : errorLogin} disabled={!isValid}>
+              <Text style={styles.buttonText}>SIGN IN</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate("Registration")}>
+              <Text style={styles.registerButtonText}>Haven't Registered? Sign up here</Text>
+            </TouchableOpacity>
           </View>
         )}
       </Formik>
-
-      <TouchableOpacity 
-        onPress={() => navigation.navigate("RegistraionScreen")}
-      >
-        <Text>
-          Haven't Registered?
-        </Text>
-      </TouchableOpacity>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#fff",
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    marginBottom: 10,
+  },
+  input: {
+    flex: 1,
+    marginLeft: 10,
+  },
+  errorMessage: {
+    color: 'red',
+    marginLeft: 5,
+  },
+  button: {
+    backgroundColor: '#3461A8',
+    paddingVertical: 12,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  registerButton: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  registerButtonText: {
+    color: '#3461A8',
+    fontSize: 16,
+  },
+});
 
 export default Signin;
