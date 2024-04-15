@@ -16,6 +16,7 @@ import SettingTile from "./Tiles/Settings/SettingTile";
 import AssetImage from "./Reusable/AssetImage";
 import { listingGeo } from "./Interfaces/ListingGeo";
 import ExploreHeader from "./Header/ExploreHeader";
+import ChatScreen from "./Chat/Chat";
 export {
     ReusableText,
     ReusableBtn,
@@ -34,6 +35,7 @@ export {
     SettingTile, 
     AssetImage,
     listingGeo,
-    ExploreHeader
+    ExploreHeader,
+    ChatScreen
    
 }

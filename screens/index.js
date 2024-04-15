@@ -21,7 +21,8 @@ import Failed from "./bookings/Failed";
 import RegistraionScreen from  "./Auth/RegistraionScreen"
 import SigninScreen from "./Auth/SigninScreen";
 import Registration from "./authentication/Registration";
-
+import UserSelectionScreen from "./chat/UserSelectionScreen";
+import SelectUserForChat from "./chat/ChatSelectionScreen";
 export {
     Onboarding,
     Failed,
@@ -45,5 +46,7 @@ export {
     Settings,
     RegistraionScreen,
     SigninScreen,
-    Registration
+    Registration,
+    UserSelectionScreen,
+    SelectUserForChat
 }
